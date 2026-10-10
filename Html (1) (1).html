@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบรายงานสรุปกิจกรรมพัฒนาผู้เรียน ภาคเรียนที่ 1 ปีการศึกษา 2569</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0F766E;
+            --accent: #FBBF24;
+            --bg: #FFFFFF;
+            --soft-bg: #F0FDFA;
+            --text-main: #1F2937;
+            --text-muted: #4B5563;
+            --card-bg: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: var(--soft-bg);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 1777.78vh; /* 16:9 aspect ratio */
+            max-height: 56.25vw;
+            aspect-ratio: 16 / 9;
+            background-color: var(--bg);
+            position: relative;
+            box-shadow: 0 20px 40px rgba(15, 118, 110, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 4% 6%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease-in-out;
+            background: linear-gradient(135deg, #FFFFFF 0% 1000%, var(--soft-bg) 100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Slide Content Animation */
+        .slide.active .card-animate {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .slide.active .card-animate:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .card-animate:nth-child(2) { animation-delay: 0.2s; }
+        .slide.active .card-animate:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header Elements */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .category-badge {
+            background-color: var(--soft-bg);
+            color: var(--primary);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: 1px solid rgba(15, 118, 110, 0.2);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .slide-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0F766E, #115E59);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        /* Grid & Cards */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            flex: 1;
+            align-items: stretch;
+            margin-bottom: 2rem;
+        }
+
+        .content-grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(15, 118, 110, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(15, 118, 110, 0.1);
+        }
+
+        .icon-container {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), #14B8A6);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 8px 16px rgba(15, 118, 110, 0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .icon-container {
+            transform: scale(1.1);
+        }
+
+        .icon-container i {
+            color: #FFFFFF;
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.8rem;
+        }
+
+        .card p, .card li {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            list-style: none;
+        }
+
+        .card ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* Footer / Navigation Controls */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            padding-top: 1.2rem;
+        }
+
+        .page-number {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .nav-btn {
+            background-color: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(15, 118, 110, 0.2);
+        }
+
+        .nav-btn:hover {
+            background-color: #115E59;
+            transform: scale(1.05);
+        }
+
+        .highlight-text {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .accent-badge {
+            background-color: var(--accent);
+            color: #78350F;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Title Slide Layout */
+        .title-slide-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex: 1;
+            gap: 1.5rem;
+        }
+
+        .title-slide-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-main);
+            max-width: 900px;
+            line-height: 1.2;
+        }
+
+        .title-slide-content h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .presenter-box {
+            background: var(--soft-bg);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(15, 118, 110, 0.15);
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .presenter-box strong {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-container">
+
+    <!-- Slide 1: หน้าปก -->
+    <div class="slide active" id="slide-1">
+        <div class="slide-header">
+            <span class="category-badge"><i class="fas fa-school"></i> โรงเรียนหาดใหญ่วิทยาคาร</span>
+            <span class="category-badge" style="background-color: var(--accent); color: #78350F; border: none;"><i class="fas fa-user-friends"></i> ระดับประถมศึกษา</span>
+        </div>
+        <div class="title-slide-content card-animate">
+            <div class="icon-container" style="width: 80px; height: 80px; margin: 0 auto 0.5rem auto;">
+                <i class="fas fa-trophy" style="font-size: 2rem;"></i>
+            </div>
+            <h1>แบบรายงานสรุปกิจกรรมพัฒนาผู้เรียน<br><span>ภาคเรียนที่ 1 ปีการศึกษา 2569</span></h1>
+            <div class="presenter-box">
+                นำเสนอโดย: <strong>ว่าที่ร.ต.หญิงมีนา กุลนิล</strong>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="page-number">หน้า 1 / 8</span>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: ภาพรวมกิจกรรมพัฒนาผู้เรียน -->
+    <div class="slide" id="slide-2">
+        <div class="slide-header">
+            <h2 class="slide-title">ภาพรวมกิจกรรมพัฒนาผู้เรียน</h2>
+            <span class="category-badge"><i class="fas fa-chart-pie"></i> บทนำ</span>
+        </div>
+        <div class="content-grid card-animate">
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-bullseye"></i></div>
+                <h3>เป้าหมายหลัก</h3>
+                <p>ส่งเสริมศักยภาพด้านกีฬาและระเบียบวินัยสำหรับนักเรียนระดับชั้นประถมศึกษา เพื่อสร้างเสริมสุขภาพกายและใจให้แข็งแรง</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-medal"></i></div>
+                <h3>การแข่งขันกีฬา</h3>
+                <p>สนับสนุนให้นักเรียนได้แสดงออกถึงความสามารถผ่านการแข่งขันกีฬาหลากหลายประเภทในระดับจังหวัดสงขลา ปีการศึกษา 2569</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-star"></i></div>
+                <h3>ความภาคภูมิใจ</h3>
+                <p>รวบรวมผลงานเด่นจากทักษะกีฬาประเภทต่างๆ ทั้งศิลปะการต่อสู้ กีฬาเป็นทีม และกีฬาดี่ยวอย่างยอดเยี่ยม</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="page-number">หน้า 2 / 8</span>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: ผลงานเทควันโด (1) -->
+    <div class="slide" id="slide-3">
+        <div class="slide-header">
+            <h2 class="slide-title">ผลงานกีฬาเทควันโด (ประเภทต่อสู้)</h2>
+            <span class="category-badge"><i class="fas fa-fist-raised"></i> ศิลปะการต่อสู้</span>
+        </div>
+        <div class="content-grid card-animate">
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-award"></i></div>
+                <h3>เหรียญทอง</h3>
+                <p>นักเรียนโชว์ฟอร์มเยี่ยมคว้าชัยชนะในประเภทต่อสู้</p>
+                <br>
+                <p><span class="highlight-text">ชนะเลิศอันดับ 1:</span> จำนวน 3 คน</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-medal"></i></div>
+                <h3>เหรียญเงิน</h3>
+                <p>สู้สุดใจจนสามารถคว้ารางวัลเกียรติยศมาครองได้สำเร็จ</p>
+                <br>
+                <p><span class="highlight-text">รองชนะเลิศอันดับ 1:</span> จำนวน 10 คน</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-medal" style="color: #FBBF24;"></i></div>
+                <h3>เหรียญทองแดง</h3>
+                <p>แสดงทักษะความมุ่งมั่นและเทคนิคการต่อสู้ที่ดีเยี่ยม</p>
+                <br>
+                <p><span class="highlight-text">รองชนะเลิศอันดับ 2:</span> จำนวน 3 คน</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="page-number">หน้า 3 / 8</span>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: ผลงานเทควันโด (2) -->
+    <div class="slide" id="slide-4">
+        <div class="slide-header">
+            <h2 class="slide-title">สรุปภาพรวมเทควันโดจังหวัดสงขลา</h2>
+            <span class="category-badge"><i class="fas fa-chart-bar"></i> สถิติเทควันโด</span>
+        </div>
+        <div class="content-grid content-grid-2 card-animate">
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-users"></i></div>
+                <h3>การเข้าร่วมแข่งขัน</h3>
+                <p>นักเรียนระดับประถมศึกษาของเราเข้าร่วมชิงชัยในหลากหลายรุ่นน้ำหนักและอายุ</p>
+                <br>
+                <p><span class="highlight-text">นักเรียนเข้าร่วมเพิ่มเติม:</span> 1 คน</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-check-circle"></i></div>
+                <h3>บทสรุปความสำเร็จ</h3>
+                <p>นับเป็นความสำเร็จที่น่าภาคภูมิใจของนักกีฬาเทควันโดโรงเรียนหาดใหญ่วิทยาคารทุกคน</p>
+                <br>
+                <p><span class="highlight-text">รวมผู้ได้รับรางวัล:</span> รวมกว่า 16 คน</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="page-number">หน้า 4 / 8</span>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: ผลงานฟุตซอล -->
+    <div class="slide" id="slide-5">
+        <div class="slide-header">
+            <h2 class="slide-title">ผลการแข่งขันกีฬาฟุตซอล</h2>
+            <span class="category-badge"><i class="fas fa-futbol"></i> กีฬาประเภททีม</span>
+        </div>
+        <div class="content-grid card-animate">
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-shield-alt"></i></div>
+                <h3>ภาพรวมการแข่งขัน</h3>
+                <p>ทีมนักกีฬาฟุตซอลระดับประถมศึกษาทำหน้าที่อย่างเต็มที่ จนสามารถผ่านเข้าสู่รอบ 26 ทีมสุดท้าย</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-running"></i></div>
+                <h3>ผลการพบกันในรอบต่างๆ</h3>
+                <ul>
+                    <li>• แพ้ ทต.ทุ่งตำเสา <span class="accent-badge">1-5</span></li>
+                    <li>• แพ้ ทต.สะเดา <span class="accent-badge">1-8</span></li>
+                    <li>• แพ้ แสงทองวิทยา <span class="accent-badge">0-3</span></li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-heart"></i></div>
+                <h3>บทเรียนและประสบการณ์</h3>
+                <p>สร้างเสริมความสามัคคี การทำงานเป็นทีม และน้ำใจนักกีฬา รู้แพ้ รู้ชนะ รู้อภัย เพื่อพัฒนาต่อยอดในอนาคต</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="page-number">หน้า 5 / 8</span>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: ผลงานว่ายน้ำ -->
+    <div class="slide" id="slide-6">
+        <div class="slide-header">
+            <h2 class="slide-title">ผลงานกีฬาว่ายน้ำ</h2>
+            <span class="category-badge"><i class="fas fa-swimmer"></i> กีฬาทางน้ำ</span>
+        </div>
+        <div class="content-grid card-animate">
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-medal"></i></div>
+                <h3>ความเป็นเลิศทางน้ำ</h3>
+                <p>นักกีฬาว่ายน้ำโชว์ฟอร์มเยี่ยม ทำเวลาได้อย่างยอดเยี่ยมในการแข่งขันระดับจังหวัด</p>
+                <br>
+                <p><span class="highlight-text">ชนะเลิศอันดับ 1:</span> จำนวน 3 รายการ</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-award"></i></div>
+                <h3>รองชนะเลิศ</h3>
+                <p>ขับเคี่ยวกับนักกีฬาจากสถาบันอื่นๆ จนคว้าเหรียญรางวัลสำคัญมาได้</p>
+                <br>
+                <p><span class="highlight-text">รองชนะเลิศอันดับ 1:</span> จำนวน 1 รายการ</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-stopwatch"></i></div>
+                <h3>สถิติส่วนบุคคล</h3>
+                <p>นักเรียนทุกคนมุ่งมั่นพัฒนาศักยภาพ บันทึกสถิติเวลาที่ดีที่สุดของตนเองสำเร็จ</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="page-number">หน้า 6 / 8</span>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: ผลงานกรีฑา -->
+    <div class="slide" id="slide-7">
+        <div class="slide-header">
+            <h2 class="slide-title">ผลการแข่งขันกีฬากรีฑา</h2>
+            <span class="category-badge"><i class="fas fa-running"></i> กรีฑาลู่และลาน</span>
+        </div>
+        <div class="content-grid card-animate">
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-child"></i></div>
+                <h3>รุ่นอายุ 8 ปี</h3>
+                <p>ส่งเสริมประสบการณ์ให้นักเรียนรุ่นจิ๋วได้เรียนรู้บรรยากาศการแข่งขันจริง</p>
+                <br>
+                <p><span class="highlight-text">สถานะ:</span> เข้าร่วมและทำสถิติเยี่ยม</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-fire"></i></div>
+                <h3>รุ่นอายุ 10 ปี</h3>
+                <p>พัฒนาความเร็วและความอึด แข่งขันเคียงบ่าเคียงไหล่กับโรงเรียนอื่น</p>
+                <br>
+                <p><span class="highlight-text">สถานะ:</span> เข้าร่วมและบันทึกเวลาเปรียบเทียบ</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-bolt"></i></div>
+                <h3>รุ่นอายุ 12 ปี</h3>
+                <p>รุ่นพี่แสดงศักยภาพเต็มที่ในทุกรายการวิ่งและลาน</p>
+                <br>
+                <p><span class="highlight-text">สถานะ:</span> เข้าร่วมและจบการแข่งขันตามเกณฑ์</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="page-number">หน้า 7 / 8</span>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: สรุปภาพรวมและแนวทางพัฒนา -->
+    <div class="slide" id="slide-8">
+        <div class="slide-header">
+            <h2 class="slide-title">สรุปผลและการพัฒนาต่อยอด</h2>
+            <span class="category-badge"><i class="fas fa-flag-checkered"></i> บทสรุป</span>
+        </div>
+        <div class="content-grid card-animate">
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-thumbs-up"></i></div>
+                <h3>ความสำเร็จภาพรวม</h3>
+                <p>นักเรียนระดับประถมศึกษาโรงเรียนหาดใหญ่วิทยาคารแสดงศักยภาพทางกีฬาได้อย่างยอดเยี่ยมในทุกประเภท</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-chart-line"></i></div>
+                <h3>แนวทางพัฒนา</h3>
+                <p>นำผลการแข่งขันและสถิติเวลามาวิเคราะห์ เพื่อวางแผนฝึกซ้อมและยกระดับขีดความสามารถให้สูงขึ้นในปีถัดไป</p>
+            </div>
+            <div class="card">
+                <div class="icon-container"><i class="fas fa-smile-beam"></i></div>
+                <h3>ความประทับใจ</h3>
+                <p>สร้างเสริมวินัย ความรับผิดชอบ และความสุขให้กับนักเรียนผ่านกิจกรรมพัฒนาผู้เรียนตลอดภาคเรียนที่ 1 ปี 2569</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="page-number">หน้า 8 / 8</span>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-btn" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        showSlide(currentSlide);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            prevSlide();
+        }
+    });
+</script>
+
+</body>
+</html>
